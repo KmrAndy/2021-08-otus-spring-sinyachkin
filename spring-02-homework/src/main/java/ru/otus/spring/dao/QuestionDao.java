@@ -2,8 +2,8 @@ package ru.otus.spring.dao;
 
 import ru.otus.spring.domain.Question;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface QuestionDao {
-    ArrayList<Question> getQuestions();
+    List<Question> getQuestions();
 }

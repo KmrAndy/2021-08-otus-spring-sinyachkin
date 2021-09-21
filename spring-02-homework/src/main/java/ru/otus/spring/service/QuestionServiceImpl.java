@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -15,9 +16,6 @@ public class QuestionServiceImpl implements QuestionService {
         this.dao = dao;
     }
 
-    public ArrayList<Question> getQuestions() {
-        return dao.getQuestions();
-    }
+    public List<Question> getQuestions(){ return dao.getQuestions(); }
 
-    public boolean checkResult(Question question, String answer){ return true; };
 }

@@ -3,7 +3,7 @@ package ru.otus.spring.dao;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -19,18 +19,18 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     private Question parseQuestionLine(String line){
-        String[] chunks = line.split(";");
+        List<String> chunks = List.of(line.split(";"));
         // Question without answers or null line
-        if (chunks.length < 2){
+        if (chunks.size() < 2){
             throw new IllegalArgumentException("incorrect file line '" + line + "'");
         }
 
         //First column is question, last - right answer
-        return new Question(chunks[0], Arrays.copyOfRange(chunks, 1, chunks.length - 1), chunks[chunks.length - 1]);
+        return new Question(chunks.get(0), chunks.subList(1, chunks.size() - 1), chunks.get(chunks.size() - 1));
     }
 
-    private ArrayList<Question> parseFileAndCollectQuestions(InputStream inputStream){
-        ArrayList<Question> questions = new ArrayList<Question>();
+    private List<Question> parseFileAndCollectQuestions(InputStream inputStream){
+        List<Question> questions = new ArrayList<>();
 
         try (InputStreamReader streamReader =
                      new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -43,11 +43,12 @@ public class QuestionDaoImpl implements QuestionDao {
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("Error reading file");
         }
         return questions;
     }
 
-    public ArrayList<Question> getQuestions(){
+    public List<Question> getQuestions(){
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(this.questionFileName);
 
         // get and parse file data

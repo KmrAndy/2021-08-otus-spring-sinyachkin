@@ -10,6 +10,7 @@ import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -31,9 +32,9 @@ class QuestionServiceImplTest {
     @DisplayName("Тест метода getQuestions")
     @Test
     void shouldReturnSameQuestionsAsDao() {
-        ArrayList<Question> questionsList = new ArrayList<Question>();
-        questionsList.add(new Question("QuestionText", new String[] {"Answer1", "Answer2"}, "Answer1"));
-        questionsList.add(new Question("TextQuestion", new String[] {"Answer3", "Answer4", "Answer5"}, "Answer5"));
+        List<Question> questionsList = new ArrayList<>();
+        questionsList.add(new Question("QuestionText", List.of("Answer1", "Answer2"), "Answer1"));
+        questionsList.add(new Question("TextQuestion", List.of("Answer3", "Answer4", "Answer5"), "Answer5"));
 
         when(dao.getQuestions()).thenReturn(questionsList);
         assertEquals(dao.getQuestions(), questionService.getQuestions());
