@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
+import ru.otus.spring.exception.QuestionReaderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ class QuestionServiceImplTest {
 
     @DisplayName("Тест метода getQuestions")
     @Test
-    void shouldReturnSameQuestionsAsDao() {
+    void shouldReturnSameQuestionsAsDao() throws QuestionReaderException {
         List<Question> questionsList = new ArrayList<>();
         questionsList.add(new Question("QuestionText", List.of("Answer1", "Answer2"), "Answer1"));
         questionsList.add(new Question("TextQuestion", List.of("Answer3", "Answer4", "Answer5"), "Answer5"));

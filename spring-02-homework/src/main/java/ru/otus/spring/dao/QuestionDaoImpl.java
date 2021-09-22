@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.domain.Question;
+import ru.otus.spring.exception.QuestionReaderException;
 
 @Repository
 public class QuestionDaoImpl implements QuestionDao {
@@ -29,7 +30,7 @@ public class QuestionDaoImpl implements QuestionDao {
         return new Question(chunks.get(0), chunks.subList(1, chunks.size() - 1), chunks.get(chunks.size() - 1));
     }
 
-    private List<Question> parseFileAndCollectQuestions(InputStream inputStream){
+    private List<Question> parseFileAndCollectQuestions(InputStream inputStream) throws QuestionReaderException {
         List<Question> questions = new ArrayList<>();
 
         try (InputStreamReader streamReader =
@@ -42,13 +43,12 @@ public class QuestionDaoImpl implements QuestionDao {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Error reading file");
+            throw new QuestionReaderException("Error during reading questions from file", e);
         }
         return questions;
     }
 
-    public List<Question> getQuestions(){
+    public List<Question> getQuestions() throws QuestionReaderException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(this.questionFileName);
 
         // get and parse file data

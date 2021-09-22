@@ -1,15 +1,13 @@
 package ru.otus.spring.service;
 
-public interface IOStreamService {
+public interface IOService {
     void printLine(String line);
 
-    void printLine();
+    void printEmptyLine();
 
     String inputLine();
 
     void inputNext();
-
-    boolean inputHasInt();
 
     int inputInt();
 }

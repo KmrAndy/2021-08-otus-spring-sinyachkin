@@ -5,18 +5,18 @@ import ru.otus.spring.domain.Person;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    private final IOStreamService ioStreamService;
+    private final IOService ioService;
 
-    public PersonServiceImpl(IOStreamService ioStreamService){
-        this.ioStreamService = ioStreamService;
+    public PersonServiceImpl(IOService ioService){
+        this.ioService = ioService;
     }
 
     public Person createPerson(){
-        ioStreamService.printLine("Enter your First name: ");
-        String firstName = ioStreamService.inputLine();
-        ioStreamService.printLine("Enter your Last name: ");
-        String lastName = ioStreamService.inputLine();
-        ioStreamService.printLine();
+        ioService.printLine("Enter your First name: ");
+        String firstName = ioService.inputLine();
+        ioService.printLine("Enter your Last name: ");
+        String lastName = ioService.inputLine();
+        ioService.printEmptyLine();
 
         return new Person(firstName, lastName);
     }
