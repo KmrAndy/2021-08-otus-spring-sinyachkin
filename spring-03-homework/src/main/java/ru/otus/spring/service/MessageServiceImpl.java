@@ -2,27 +2,25 @@ package ru.otus.spring.service;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.config.AppPropsConfig;
+import ru.otus.spring.provider.LocaleProvider;
+
+import java.util.Locale;
 
 @Service
 public class MessageServiceImpl implements MessageService{
-    private AppPropsConfig config;
+    private final Locale locale;
     private final MessageSource messageSource;
 
-    public MessageServiceImpl(MessageSource messageSource, AppPropsConfig config) {
-        this.config = config;
+    public MessageServiceImpl(MessageSource messageSource, LocaleProvider localeProvider) {
+        this.locale = localeProvider.getLocale();
         this.messageSource = messageSource;
     }
 
-    public String getMessage(String messageCode, String[] args) {
-        return messageSource.getMessage(messageCode, args, config.getLocale());
+    public String getMessage(String messageCode, String ... args) {
+        return messageSource.getMessage(messageCode, args, locale);
     }
 
     public String getMessage(String messageCode) {
         return getMessage(messageCode, (String[]) null);
-    }
-
-    public String getMessage(String messageCode, String arg){
-        return getMessage(messageCode, new String[]{arg});
     }
 }

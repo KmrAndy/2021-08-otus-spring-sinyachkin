@@ -11,17 +11,17 @@ public class QuizServiceImpl implements QuizService {
     private final QuestionService questionService;
     private final PersonService personService;
     private final IOService ioService;
-    private final MessageService messageService;
+    private final PrintMessageService printMsgService;
 
     private static final int ANSWER_IS_RIGHT = 1;
     private static final int ANSWER_IS_WRONG = 0;
 
     public QuizServiceImpl(QuestionService questionService, PersonService personService,
-                           IOService ioService, MessageService messageService) {
+                           IOService ioService, PrintMessageService printMsgService) {
         this.questionService = questionService;
         this.personService = personService;
         this.ioService = ioService;
-        this.messageService = messageService;
+        this.printMsgService = printMsgService;
     }
 
     public void run(){
@@ -30,13 +30,13 @@ public class QuizServiceImpl implements QuizService {
         Person player = personService.createPerson();
 
         ioService.printEmptyLine();
-        ioService.printLine(messageService.getMessage("strings.greetings", player.getName()));
+        printMsgService.printMessage("strings.greetings", player.getName());
 
         try {
             questions = questionService.getQuestions();
         }
         catch(Exception e){
-            ioService.printLine(messageService.getMessage("strings.error-prepare-questions", e.getMessage()));
+            printMsgService.printMessage("strings.error-prepare-questions", e.getMessage());
             return;
         }
 
@@ -44,20 +44,20 @@ public class QuizServiceImpl implements QuizService {
         int result = startQuiz(questions);
 
         //Printing result
-        ioService.printLine(messageService.getMessage("strings.quiz-result-label"));
+        printMsgService.printMessage("strings.quiz-result-label");
         ioService.printLine(player.getName() + ": " + result + "/" + questions.size());
     }
 
     private int startQuiz(List<Question> questions){
         int result = 0;
-        ioService.printLine(messageService.getMessage("strings.quiz-label"));
+        printMsgService.printMessage("strings.quiz-label");
 
         for(int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
-            ioService.printLine(messageService.getMessage("strings.question-label",
-                    new String[]{String.valueOf(i + 1), question.getQuestionText().trim()}));
+            printMsgService.printMessage("strings.question-label",
+                    String.valueOf(i + 1), question.getQuestionText().trim());
 
-            ioService.printLine(messageService.getMessage("strings.answers-label"));
+            printMsgService.printMessage("strings.answers-label");
 
             List<String> answers = question.getQuestionAnswers();
             for(int j = 0; j < answers.size(); j++) {
@@ -83,7 +83,7 @@ public class QuizServiceImpl implements QuizService {
 
         boolean isValueCorrect = false;
         while (!isValueCorrect) {
-            ioService.printLine(messageService.getMessage("strings.choose-answer"));
+            printMsgService.printMessage("strings.choose-answer");
 
             try {
                 userAnswer = ioService.inputInt();
@@ -94,8 +94,7 @@ public class QuizServiceImpl implements QuizService {
             }
 
             if ((userAnswer < 1) || (userAnswer > answersCount)) {
-                ioService.printLine(messageService.getMessage("strings.answer-value-exception",
-                        String.valueOf(answersCount)));
+                printMsgService.printMessage("strings.answer-value-exception", String.valueOf(answersCount));
                 continue;
             }
 

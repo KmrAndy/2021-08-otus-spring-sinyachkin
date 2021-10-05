@@ -22,7 +22,7 @@ public class AppPropsConfig {
 
     public void setLocale(String locale){ this.locale = new Locale(locale); }
 
-    public String getFilename(){ return this.filename; }
+    public String getFilename(){ return this.filename + "_" + this.locale.getLanguage() + "." + this.fileExtension; }
 
     public Locale getLocale(){
         return this.locale;

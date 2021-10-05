@@ -6,27 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import ru.otus.spring.config.AppPropsConfig;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.exception.QuestionReaderException;
-import ru.otus.spring.service.FilenameService;
-import ru.otus.spring.service.MessageService;
 
 @Repository
 public class QuestionDaoImpl implements QuestionDao {
 
     private final String questionFileName;
-    private final MessageService messageService;
 
-    public QuestionDaoImpl(FilenameService filenameService, MessageService messageService){
-        this.questionFileName = filenameService.getFilename();
-        this.messageService = messageService;
+    public QuestionDaoImpl(AppPropsConfig config){
+        this.questionFileName = config.getFilename();
     }
 
     private Question parseQuestionLine(String line){
         List<String> chunks = List.of(line.split(";"));
         // Question without answers or null line
         if (chunks.size() < 2){
-            throw new IllegalArgumentException(messageService.getMessage("strings.incorrect-file-line", line));
+            throw new IllegalArgumentException("Incorrect file line " + line);
         }
 
         //First column is question, last - right answer
@@ -53,13 +50,12 @@ public class QuestionDaoImpl implements QuestionDao {
         // get and parse file data
         try {
             if (inputStream == null) {
-                throw new IllegalArgumentException(messageService.getMessage("strings.file-not-found",
-                        this.questionFileName));
+                throw new IllegalArgumentException("File " + this.questionFileName + " not found");
             } else {
                 return parseFileAndCollectQuestions(inputStream);
             }
         } catch (Exception e) {
-            throw new QuestionReaderException(messageService.getMessage("strings.error-read-file"), e);
+            throw new QuestionReaderException("Error during reading questions from file", e);
         }
     }
 }

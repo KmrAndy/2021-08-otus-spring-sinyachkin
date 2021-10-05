@@ -6,22 +6,30 @@ import ru.otus.spring.domain.Person;
 @Service
 public class PersonServiceImpl implements PersonService {
     private final IOService ioService;
-    private final MessageService messageService;
+    private final PrintMessageService printMsgService;
 
-    public PersonServiceImpl(IOService ioService, MessageService messageService){
+    public PersonServiceImpl(IOService ioService, PrintMessageService printMsgService){
         this.ioService = ioService;
-        this.messageService = messageService;
+        this.printMsgService = printMsgService;
     }
 
     public Person createPerson(){
-        ioService.printLine(messageService.getMessage("strings.input-first-name"));
-        String firstName = ioService.inputLine();
+        String firstName = null;
+        String lastName = null;
 
-        ioService.printLine(messageService.getMessage("strings.input-last-name"));
-        String lastName = ioService.inputLine();
+        boolean isNameCorrect = false;
+        while (!isNameCorrect) {
+            printMsgService.printMessage("strings.input-first-name");
+            firstName = ioService.inputLine();
 
-        if ((firstName.isEmpty()) || (lastName.isEmpty())) {
-            throw new IllegalArgumentException(messageService.getMessage("strings.empty-name"));
+            printMsgService.printMessage("strings.input-last-name");
+            lastName = ioService.inputLine();
+
+            if ((firstName.isEmpty()) || (lastName.isEmpty())) {
+                printMsgService.printMessage("strings.empty-name");
+                continue;
+            }
+            isNameCorrect = true;
         }
 
         return new Person(firstName, lastName);

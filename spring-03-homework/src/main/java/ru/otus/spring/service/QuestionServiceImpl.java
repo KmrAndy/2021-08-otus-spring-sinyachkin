@@ -5,7 +5,6 @@ import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.exception.QuestionReaderException;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
