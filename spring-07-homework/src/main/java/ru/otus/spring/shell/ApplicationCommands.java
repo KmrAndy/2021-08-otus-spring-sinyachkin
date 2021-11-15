@@ -1,5 +1,6 @@
 package ru.otus.spring.shell;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.spring.domain.Book;
@@ -24,7 +25,7 @@ public class ApplicationCommands {
         try {
             return messageService.getMessage(
                     "strings.books-count-label", String.valueOf(bookService.getBooksCount()));
-        } catch(LibraryAccessException e){
+        } catch(DataAccessException e){
             return messageService.getMessage("strings.other-error-label");
         }
     }
@@ -35,7 +36,7 @@ public class ApplicationCommands {
             bookService.changeBookNameByBookId(id, newName);
             return messageService.getMessage(
                     "strings.change-book-name", String.valueOf(id), newName);
-        } catch(LibraryAccessException e){
+        } catch(DataAccessException e){
             if (e.contains(NoBookFoundException.class)){
                 return messageService.getMessage(
                         "strings.no-book-found-label", String.valueOf(id));
@@ -49,7 +50,7 @@ public class ApplicationCommands {
     public String getBookById(long id) {
         try{
             return bookService.getBookInfoById(id);
-        } catch(LibraryAccessException e){
+        } catch(DataAccessException e){
             if (e.contains(NoBookFoundException.class)){
                 return messageService.getMessage(
                         "strings.no-book-found-label", String.valueOf(id));
@@ -70,7 +71,7 @@ public class ApplicationCommands {
             bookService.deleteByBookId(id);
             return messageService.getMessage(
                     "strings.delete-book-label", String.valueOf(id));
-        } catch(LibraryAccessException e){
+        } catch(DataAccessException e){
             if (e.contains(NoBookFoundException.class)){
                 return messageService.getMessage(
                         "strings.no-book-found-label", String.valueOf(id));
@@ -81,21 +82,18 @@ public class ApplicationCommands {
     }
 
     @ShellMethod(value = "Add new book", key = {"addbook"})
-    public String addNewBook(long id, String bookName, String authorFirstName, String authorLastName, String genreName){
+    public String addNewBook(String bookName, String authorFirstName, String authorLastName, String genreName){
         try {
-            bookService.addNewBook(id, bookName, authorFirstName, authorLastName, genreName);
+            long bookId = bookService.addNewBook(bookName, authorFirstName, authorLastName, genreName);
             return messageService.getMessage(
-                    "strings.add-book-label", bookName, String.valueOf(id));
-        } catch(LibraryAccessException e){
+                    "strings.add-book-label", bookName, String.valueOf(bookId));
+        } catch(DataAccessException e){
             if (e.contains(NoAuthorFoundException.class)){
                 return messageService.getMessage(
                         "strings.no-author-found-label", authorFirstName, authorLastName);
             } else if (e.contains(NoGenreFoundException.class)){
                 return messageService.getMessage(
                         "strings.no-genre-found-label", genreName);
-            } else if (e.contains(UniqueBookIdException.class)){
-                return messageService.getMessage(
-                        "strings.add-book-exception-label", String.valueOf(id));
             } else {
                 return messageService.getMessage("strings.other-error-label");
             }

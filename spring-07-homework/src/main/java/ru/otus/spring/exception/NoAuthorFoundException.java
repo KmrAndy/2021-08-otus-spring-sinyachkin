@@ -1,6 +1,8 @@
 package ru.otus.spring.exception;
 
-public class NoAuthorFoundException extends LibraryAccessException {
+import org.springframework.dao.DataAccessException;
+
+public class NoAuthorFoundException extends DataAccessException {
     public NoAuthorFoundException(String message, Throwable cause){
         super(message, cause);
     }

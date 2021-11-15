@@ -1,9 +1,11 @@
 package ru.otus.spring.exception;
 
-public class OtherLibraryAccessException extends LibraryAccessException{
+import org.springframework.dao.DataAccessException;
+
+public class OtherAccessException extends DataAccessException {
 
     private static final String EXCEPTION_TEXT = "There is an error while interacting with DAO";
-    public OtherLibraryAccessException(Throwable cause){
+    public OtherAccessException(Throwable cause){
         super(EXCEPTION_TEXT, cause);
     }
 }

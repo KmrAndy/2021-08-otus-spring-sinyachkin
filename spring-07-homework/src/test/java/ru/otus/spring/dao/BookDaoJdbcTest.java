@@ -9,20 +9,19 @@ import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.exception.NoBookFoundException;
-import ru.otus.spring.exception.UniqueBookIdException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DisplayName("Dao для работы с библиотекой")
+@DisplayName("Dao для работы с книгами")
 @JdbcTest
-@Import(LibraryDaoJdbc.class)
-class LibraryDaoJdbcTest {
+@Import(BookDaoJdbc.class)
+class BookDaoJdbcTest {
     private static final int EXPECTED_BOOK_COUNT = 3;
 
     @Autowired
-    private LibraryDaoJdbc dao;
+    private BookDaoJdbc dao;
 
     @DisplayName("Получаем общее количество книг")
     @Test
@@ -37,15 +36,12 @@ class LibraryDaoJdbcTest {
         Author expectedAuthor = new Author(1L, "John", "Tolkien");
         Genre expectedGenre = new Genre(1L, "fantasy");
         Book expectedBook = new Book(4L, "The Hobbit", expectedAuthor, expectedGenre);
-        dao.insertBook(expectedBook);
+        long actualBookId = dao.insertBook(expectedBook.getName(), expectedAuthor.getId(), expectedGenre.getId());
 
-        Book actualBook = dao.getBookById(expectedBook.getId());
+        Book actualBook = dao.getBookById(actualBookId);
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
         assertThat(actualBook.getAuthor()).usingRecursiveComparison().isEqualTo(expectedAuthor);
         assertThat(actualBook.getGenre()).usingRecursiveComparison().isEqualTo(expectedGenre);
-
-        assertThatThrownBy(() -> dao.insertBook(expectedBook))
-                .isInstanceOf(UniqueBookIdException.class);
     }
 
     @DisplayName("Изменяем название книги по ее id")
@@ -70,24 +66,6 @@ class LibraryDaoJdbcTest {
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
         assertThat(actualBook.getAuthor()).usingRecursiveComparison().isEqualTo(expectedAuthor);
         assertThat(actualBook.getGenre()).usingRecursiveComparison().isEqualTo(expectedGenre);
-    }
-
-    @DisplayName("Получаем автора по его полному имени")
-    @Test
-    void shouldReturnAuthorByFullName() {
-        Author expectedAuthor = new Author(1L, "John", "Tolkien");
-
-        Author actualAuthor= dao.getAuthorByFullName(expectedAuthor.getFirstName(), expectedAuthor.getLastName());
-        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
-    }
-
-    @DisplayName("Получаем жанр по его названию")
-    @Test
-    void shouldReturnGenreByName() {
-        Genre expectedGenre = new Genre(1L, "fantasy");
-
-        Genre actualGenre= dao.getGenreByName(expectedGenre.getName());
-        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
 
     @DisplayName("Получаем все книги")

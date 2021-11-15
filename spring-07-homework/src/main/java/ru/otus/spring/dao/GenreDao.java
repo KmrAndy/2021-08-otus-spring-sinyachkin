@@ -1,8 +1,8 @@
-package ru.otus.spring.service;
+package ru.otus.spring.dao;
 
 import org.springframework.dao.DataAccessException;
 import ru.otus.spring.domain.Genre;
 
-public interface GenreService {
+public interface GenreDao {
     Genre getGenreByName(String genreName) throws DataAccessException;
 }

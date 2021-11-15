@@ -10,7 +10,9 @@ import java.util.Locale;
 public class AppPropsConfigImpl implements AppPropsConfig {
     private Locale locale;
 
-    public void setLocale(String locale){ this.locale = new Locale(locale); }
+    public void setLocale(String locale){
+        this.locale = new Locale(locale);
+    }
 
     public Locale getLocale(){
         return this.locale;

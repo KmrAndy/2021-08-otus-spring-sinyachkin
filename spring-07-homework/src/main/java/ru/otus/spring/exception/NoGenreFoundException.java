@@ -1,6 +1,8 @@
 package ru.otus.spring.exception;
 
-public class NoGenreFoundException extends LibraryAccessException {
+import org.springframework.dao.DataAccessException;
+
+public class NoGenreFoundException extends DataAccessException {
     public NoGenreFoundException(String message, Throwable cause){
         super(message, cause);
     }

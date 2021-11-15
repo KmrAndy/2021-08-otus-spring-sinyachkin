@@ -8,6 +8,4 @@ import lombok.RequiredArgsConstructor;
 public class Genre {
     private final long id;
     private final String name;
-
-    public long getId(){ return this.id; }
 }

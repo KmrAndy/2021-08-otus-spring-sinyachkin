@@ -6,7 +6,9 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.otus.spring.dao.LibraryDao;
+import ru.otus.spring.dao.AuthorDao;
+import ru.otus.spring.dao.BookDao;
+import ru.otus.spring.dao.GenreDao;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
@@ -20,12 +22,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@DisplayName("Dao для работы с библиотекой")
+@DisplayName("Сервис для работы с книгами")
 @SpringBootTest
 class BookServiceImplTest {
 
     @MockBean
-    private LibraryDao dao;
+    private BookDao bookDao;
+
+    @MockBean
+    private AuthorService authorService;
+
+    @MockBean
+    private GenreService genreService;
 
     @Autowired
     private BookServiceImpl bookService;
@@ -35,8 +43,8 @@ class BookServiceImplTest {
     void shouldReturnExpectedBookCount() {
         int expectedBooksCount = 3;
 
-        when(dao.count()).thenReturn(expectedBooksCount);
-        assertEquals(dao.count(), bookService.getBooksCount());
+        when(bookDao.count()).thenReturn(expectedBooksCount);
+        assertEquals(bookDao.count(), bookService.getBooksCount());
     }
 
     @DisplayName("Добавляем новую книгу")
@@ -46,27 +54,32 @@ class BookServiceImplTest {
         Genre expectedGenre = new Genre(1L, "fantasy");
         Book expectedBook = new Book(4L, "The Hobbit", expectedAuthor, expectedGenre);
 
-        ArgumentCaptor<Book> bookCapture = ArgumentCaptor.forClass(Book.class);
-        doNothing().when(dao).insertBook(bookCapture.capture());
-        when(dao.getAuthorByFullName(expectedAuthor.getFirstName(), expectedAuthor.getLastName()))
+        when(bookDao.insertBook(expectedBook.getName(), expectedBook.getAuthor().getId()
+                , expectedBook.getGenre().getId()))
+                .thenReturn(expectedBook.getId());
+        when(bookDao.getBookById(expectedBook.getId()))
+                .thenReturn(expectedBook);
+        when(authorService.getAuthorByName(expectedAuthor.getFirstName(), expectedAuthor.getLastName()))
                 .thenReturn(expectedAuthor);
-        when(dao.getGenreByName(expectedGenre.getName())).thenReturn(expectedGenre);
+        when(genreService.getGenreByName(expectedGenre.getName())).thenReturn(expectedGenre);
 
-        bookService.addNewBook(expectedBook.getId(), expectedBook.getName(), expectedBook.getAuthor().getFirstName(),
+        long bookId = bookService.addNewBook(expectedBook.getName(), expectedBook.getAuthor().getFirstName(),
                 expectedBook.getAuthor().getLastName(), expectedBook.getGenre().getName());
 
-        assertEquals(expectedBook, bookCapture.getValue());
+        Book actualBook = bookService.getBookById(bookId);
+
+        assertEquals(expectedBook, actualBook);
     }
 
     @DisplayName("Изменяем название книги по ее id")
     @Test
     void shouldChangeBookNameByBookId() {
-        long expectedBookId = 1;
+        long bookId = 1;
         String expectedBookName = "Test Book";
         ArgumentCaptor<String> bookNameCapture = ArgumentCaptor.forClass(String.class);
-        doNothing().when(dao).updateBookNameById(any(Long.class), bookNameCapture.capture());
+        doNothing().when(bookDao).updateBookNameById(any(Long.class), bookNameCapture.capture());
 
-        bookService.changeBookNameByBookId(expectedBookId,expectedBookName);
+        bookService.changeBookNameByBookId(bookId,expectedBookName);
         assertEquals(expectedBookName, bookNameCapture.getValue());
     }
 
@@ -77,7 +90,7 @@ class BookServiceImplTest {
         Genre expectedGenre = new Genre(1L, "fantasy");
         Book expectedBook = new Book(1L, "The Lord of the Rings", expectedAuthor, expectedGenre);
 
-        when(dao.getBookById(expectedBook.getId())).thenReturn(expectedBook);
+        when(bookDao.getBookById(expectedBook.getId())).thenReturn(expectedBook);
         assertEquals(bookService.getBookById(expectedBook.getId()), expectedBook);
     }
 
@@ -88,7 +101,7 @@ class BookServiceImplTest {
         Genre expectedGenre = new Genre(1L, "fantasy");
         Book expectedBook = new Book(1L, "The Lord of the Rings", expectedAuthor, expectedGenre);
 
-        when(dao.getBookById(expectedBook.getId())).thenReturn(expectedBook);
+        when(bookDao.getBookById(expectedBook.getId())).thenReturn(expectedBook);
         assertEquals(bookService.getBookInfoById(expectedBook.getId()), String.valueOf(expectedBook));
     }
 
@@ -104,7 +117,7 @@ class BookServiceImplTest {
         expectedBooks.add(new Book(2L, "War and Piece", expectedSecondAuthor, expectedSecondGenre));
         expectedBooks.add(new Book(3L, "Anna Karenina", expectedSecondAuthor, expectedSecondGenre));
 
-        when(dao.getAllBooks()).thenReturn(expectedBooks);
+        when(bookDao.getAllBooks()).thenReturn(expectedBooks);
         assertEquals(bookService.getAllBooks(), expectedBooks);
     }
 
@@ -113,12 +126,12 @@ class BookServiceImplTest {
     void deleteByBookId() {
         long expectedBookId = 1;
         ArgumentCaptor<Long> bookIdCapture = ArgumentCaptor.forClass(Long.class);
-        doNothing().when(dao).deleteByBookId(bookIdCapture.capture());
+        doNothing().when(bookDao).deleteByBookId(bookIdCapture.capture());
 
         bookService.deleteByBookId(expectedBookId);
         assertEquals(expectedBookId, bookIdCapture.getValue());
 
-        doThrow(NoBookFoundException.class).when(dao).deleteByBookId(isA(Long.class));
+        doThrow(NoBookFoundException.class).when(bookDao).deleteByBookId(isA(Long.class));
         assertThatThrownBy(() -> bookService.deleteByBookId(expectedBookId))
                 .isInstanceOf(NoBookFoundException.class);
     }

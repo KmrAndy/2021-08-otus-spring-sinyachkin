@@ -10,20 +10,4 @@ public class Book {
     private final String name;
     private final Author author;
     private final Genre genre;
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
 }

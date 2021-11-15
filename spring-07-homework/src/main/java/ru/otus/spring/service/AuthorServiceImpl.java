@@ -1,17 +1,19 @@
 package ru.otus.spring.service;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.LibraryDao;
+import ru.otus.spring.dao.AuthorDao;
 import ru.otus.spring.domain.Author;
-import ru.otus.spring.exception.LibraryAccessException;
 
 @Service
 public class AuthorServiceImpl implements AuthorService{
-    private final LibraryDao dao;
+    private final AuthorDao dao;
 
-    public AuthorServiceImpl(LibraryDao dao){ this.dao = dao; }
+    public AuthorServiceImpl(AuthorDao dao){
+        this.dao = dao;
+    }
 
-    public Author getAuthorByName(String firstName, String lastName) throws LibraryAccessException{
+    public Author getAuthorByName(String firstName, String lastName) throws DataAccessException {
         return dao.getAuthorByFullName(firstName, lastName);
     }
 }

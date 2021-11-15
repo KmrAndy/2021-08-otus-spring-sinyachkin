@@ -13,5 +13,6 @@ public class LocaleProviderImpl implements LocaleProvider{
         this.locale = config.getLocale();
     }
 
-    public Locale getLocale(){ return this.locale; }
+    public Locale getLocale(){
+        return this.locale; }
 }

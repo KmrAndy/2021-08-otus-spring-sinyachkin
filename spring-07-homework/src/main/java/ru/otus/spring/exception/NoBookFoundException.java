@@ -1,6 +1,8 @@
 package ru.otus.spring.exception;
 
-public class NoBookFoundException extends LibraryAccessException {
+import org.springframework.dao.DataAccessException;
+
+public class NoBookFoundException extends DataAccessException {
     public NoBookFoundException(String message, Throwable cause){
         super(message, cause);
     }

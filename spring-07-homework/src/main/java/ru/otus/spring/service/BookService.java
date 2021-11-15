@@ -1,22 +1,22 @@
 package ru.otus.spring.service;
 
+import org.springframework.dao.DataAccessException;
 import ru.otus.spring.domain.Book;
-import ru.otus.spring.exception.LibraryAccessException;
 
 import java.util.List;
 
 public interface BookService {
-    int getBooksCount() throws LibraryAccessException;
+    int getBooksCount() throws DataAccessException;
 
-    void addNewBook(long bookId, String bookName, String authorFirstName, String authorLastName,String genreName) throws LibraryAccessException;
+    long addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName) throws DataAccessException;
 
-    void changeBookNameByBookId(long id, String newName) throws LibraryAccessException;
+    void changeBookNameByBookId(long id, String newName) throws DataAccessException;
 
-    Book getBookById(long id) throws LibraryAccessException;
+    Book getBookById(long id) throws DataAccessException;
 
-    String getBookInfoById(long id) throws LibraryAccessException;
+    String getBookInfoById(long id) throws DataAccessException;
 
-    List<Book> getAllBooks() throws LibraryAccessException;
+    List<Book> getAllBooks() throws DataAccessException;
 
-    void deleteByBookId(long id) throws LibraryAccessException;
+    void deleteByBookId(long id) throws DataAccessException;
 }
