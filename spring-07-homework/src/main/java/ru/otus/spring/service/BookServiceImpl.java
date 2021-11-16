@@ -25,9 +25,10 @@ public class BookServiceImpl implements BookService{
 
     public long addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName)
             throws DataAccessException{
-        return dao.insertBook(bookName,
-                authorService.getAuthorByName(authorFirstName, authorLastName).getId(),
-                genreService.getGenreByName(genreName).getId());
+        return dao.insertBook(
+                new Book(bookName,
+                        authorService.getAuthorByName(authorFirstName, authorLastName),
+                        genreService.getGenreByName(genreName)));
     }
 
     public void changeBookNameByBookId(long id, String newName) throws DataAccessException{

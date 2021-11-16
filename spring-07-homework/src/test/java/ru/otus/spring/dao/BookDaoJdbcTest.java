@@ -36,7 +36,7 @@ class BookDaoJdbcTest {
         Author expectedAuthor = new Author(1L, "John", "Tolkien");
         Genre expectedGenre = new Genre(1L, "fantasy");
         Book expectedBook = new Book(4L, "The Hobbit", expectedAuthor, expectedGenre);
-        long actualBookId = dao.insertBook(expectedBook.getName(), expectedAuthor.getId(), expectedGenre.getId());
+        long actualBookId = dao.insertBook(expectedBook);
 
         Book actualBook = dao.getBookById(actualBookId);
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);

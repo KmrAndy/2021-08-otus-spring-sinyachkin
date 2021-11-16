@@ -130,3 +130,9 @@
 1636993160701:addbook test leo tolstoy novel
 1636993166268:delbook 3
 1636993169477:getall
+1637088126157:addbook test leo tolstoy novel
+1637088129459:getall
+1637088152233:addbook test leo tolstov novel
+1637088161163:addbook test leo tolstoy drama
+1637088174825:addbook test leo tolstoy fantasy
+1637088177253:getall

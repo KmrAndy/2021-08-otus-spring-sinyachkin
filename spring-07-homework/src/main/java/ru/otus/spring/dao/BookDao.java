@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookDao {
     int count() throws DataAccessException;
 
-    long insertBook(String bookName, long authorId, long genreId) throws DataAccessException;
+    long insertBook(Book book) throws DataAccessException;
 
     void updateBookNameById(long id, String newName) throws DataAccessException;
 

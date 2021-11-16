@@ -54,11 +54,11 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public long insertBook(String bookName, long authorId, long genreId) throws DataAccessException{
+    public long insertBook(Book book) throws DataAccessException{
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("name", bookName);
-        params.addValue("author_id", authorId);
-        params.addValue("genre_id", genreId);
+        params.addValue("name", book.getName());
+        params.addValue("author_id", book.getAuthor().getId());
+        params.addValue("genre_id", book.getGenre().getId());
 
         KeyHolder kh = new GeneratedKeyHolder();
         try {

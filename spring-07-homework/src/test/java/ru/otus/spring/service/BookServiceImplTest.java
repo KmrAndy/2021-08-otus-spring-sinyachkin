@@ -17,6 +17,7 @@ import ru.otus.spring.exception.NoBookFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,23 +53,24 @@ class BookServiceImplTest {
     void shouldAddNewBook() {
         Author expectedAuthor = new Author(1L, "John", "Tolkien");
         Genre expectedGenre = new Genre(1L, "fantasy");
+        Book insertedBook = new Book("The Hobbit", expectedAuthor, expectedGenre);
         Book expectedBook = new Book(4L, "The Hobbit", expectedAuthor, expectedGenre);
 
-        when(bookDao.insertBook(expectedBook.getName(), expectedBook.getAuthor().getId()
-                , expectedBook.getGenre().getId()))
+        when(bookDao.insertBook(insertedBook))
                 .thenReturn(expectedBook.getId());
-        when(bookDao.getBookById(expectedBook.getId()))
-                .thenReturn(expectedBook);
         when(authorService.getAuthorByName(expectedAuthor.getFirstName(), expectedAuthor.getLastName()))
                 .thenReturn(expectedAuthor);
         when(genreService.getGenreByName(expectedGenre.getName())).thenReturn(expectedGenre);
 
-        long bookId = bookService.addNewBook(expectedBook.getName(), expectedBook.getAuthor().getFirstName(),
-                expectedBook.getAuthor().getLastName(), expectedBook.getGenre().getName());
+        long bookId = bookService.addNewBook(insertedBook.getName(), insertedBook.getAuthor().getFirstName(),
+                insertedBook.getAuthor().getLastName(), insertedBook.getGenre().getName());
+
+        when(bookDao.getBookById(bookId))
+                .thenReturn(expectedBook);
 
         Book actualBook = bookService.getBookById(bookId);
 
-        assertEquals(expectedBook, actualBook);
+        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
     @DisplayName("Изменяем название книги по ее id")
