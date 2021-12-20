@@ -10,7 +10,7 @@ import java.util.List;
 public interface CommentaryRepository {
     Long count(Book book) throws DataAccessException;
 
-    long insertCommentary(Commentary commentary) throws DataAccessException;
+    Commentary insertCommentary(Commentary commentary) throws DataAccessException;
 
     void updateCommentaryById(long id, String newText) throws DataAccessException;
 

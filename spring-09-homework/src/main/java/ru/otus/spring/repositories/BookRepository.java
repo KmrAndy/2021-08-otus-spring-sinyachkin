@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookRepository {
     Long count() throws DataAccessException;
 
-    long insertBook(Book book) throws DataAccessException;
+    Book insertBook(Book book) throws DataAccessException;
 
     void updateBookNameById(long id, String newName) throws DataAccessException;
 

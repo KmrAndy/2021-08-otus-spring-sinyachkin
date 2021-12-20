@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Transactional(readOnly = false)
-    public long addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName)
+    public Book addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName)
             throws DataAccessException {
         return repository.insertBook(
                 new Book(bookName,

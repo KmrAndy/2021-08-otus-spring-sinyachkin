@@ -43,8 +43,7 @@ class BookRepositoryJpaTest {
         Book actualBook = em.find(Book.class, expectedBook.getId());
         assertThat(actualBook).isNull();
 
-        long actualBookId = repository.insertBook(expectedBook);
-        actualBook = em.find(Book.class, actualBookId);
+        actualBook = repository.insertBook(expectedBook);
 
         assertThat(actualBook).isNotNull().usingRecursiveComparison().isEqualTo(expectedBook);
         assertThat(actualBook.getAuthor()).usingRecursiveComparison().isEqualTo(expectedAuthor);

@@ -90,9 +90,9 @@ public class ApplicationCommands {
     @ShellMethod(value = "Add new book", key = {"addbook"})
     public String addNewBook(String bookName, String authorFirstName, String authorLastName, String genreName){
         try {
-            long bookId = bookService.addNewBook(bookName, authorFirstName, authorLastName, genreName);
+            Book book = bookService.addNewBook(bookName, authorFirstName, authorLastName, genreName);
             return messageService.getMessage(
-                    "strings.add-book-label", bookName, String.valueOf(bookId));
+                    "strings.add-book-label", bookName, String.valueOf(book.getId()));
         } catch(DataAccessException e) {
             if (e.contains(NoAuthorFoundException.class)) {
                 return messageService.getMessage(
@@ -184,9 +184,9 @@ public class ApplicationCommands {
     @ShellMethod(value = "Add new book commentary", key = {"addcomm"})
     public String addNewBookCommentary(long bookId, String text){
         try {
-            long commentaryId = commentaryService.addNewCommentary(bookId, text);
+            Commentary commentary = commentaryService.addNewCommentary(bookId, text);
             return messageService.getMessage(
-                    "strings.add-commentary-label", text, String.valueOf(commentaryId));
+                    "strings.add-commentary-label", text, String.valueOf(commentary.getId()));
         } catch(DataAccessException e) {
             if (e.contains(NoBookFoundException.class)){
                 return messageService.getMessage(

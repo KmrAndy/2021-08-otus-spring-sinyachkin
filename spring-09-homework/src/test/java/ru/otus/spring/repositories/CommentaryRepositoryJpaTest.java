@@ -43,8 +43,7 @@ class CommentaryRepositoryJpaTest {
         expectedCommentary = new Commentary(5L, expectedBook, "New commentary");
 
 
-        long actualCommentaryId = repository.insertCommentary(expectedCommentary);
-        Commentary actualCommentary = em.find(Commentary.class, actualCommentaryId);
+        Commentary actualCommentary = repository.insertCommentary(expectedCommentary);
 
         assertThat(actualCommentary).isNotNull().usingRecursiveComparison().isEqualTo(expectedCommentary);
         assertThat(actualCommentary.getBook()).usingRecursiveComparison().isEqualTo(expectedBook);

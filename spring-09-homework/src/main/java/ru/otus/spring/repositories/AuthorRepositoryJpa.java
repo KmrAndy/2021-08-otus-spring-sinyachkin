@@ -8,7 +8,6 @@ import ru.otus.spring.models.Author;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 public class AuthorRepositoryJpa implements AuthorRepository {
     @PersistenceContext

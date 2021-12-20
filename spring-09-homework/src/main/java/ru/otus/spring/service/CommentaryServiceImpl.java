@@ -25,7 +25,7 @@ public class CommentaryServiceImpl implements CommentaryService{
     }
 
     @Transactional(readOnly = false)
-    public long addNewCommentary(long bookId, String commentaryText)
+    public Commentary addNewCommentary(long bookId, String commentaryText)
             throws DataAccessException {
         return repository.insertCommentary(
                 new Commentary(bookService.getBookById(bookId), commentaryText));

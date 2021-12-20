@@ -8,7 +8,7 @@ import java.util.List;
 public interface CommentaryService {
     Long getBookCommentariesCount(long bookId) throws DataAccessException;
 
-    long addNewCommentary(long bookId, String commentaryText) throws DataAccessException;
+    Commentary addNewCommentary(long bookId, String commentaryText) throws DataAccessException;
 
     void changeCommentaryTextById(long id, String newText) throws DataAccessException;
 

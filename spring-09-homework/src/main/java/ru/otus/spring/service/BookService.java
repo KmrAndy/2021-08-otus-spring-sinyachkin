@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookService {
     Long getBooksCount() throws DataAccessException;
 
-    long addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName) throws DataAccessException;
+    Book addNewBook(String bookName, String authorFirstName, String authorLastName,String genreName) throws DataAccessException;
 
     void changeBookNameByBookId(long id, String newName) throws DataAccessException;
 

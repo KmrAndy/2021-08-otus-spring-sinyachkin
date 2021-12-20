@@ -32,15 +32,15 @@ public class CommentaryRepositoryJpa implements CommentaryRepository {
     }
 
     @Override
-    public long insertCommentary(Commentary commentary) throws DataAccessException {
+    public Commentary insertCommentary(Commentary commentary) throws DataAccessException {
         try {
             if (commentary.getId() <= 0) {
                 em.persist(commentary);
+                return commentary;
             } else {
-                em.merge(commentary);
+                return em.merge(commentary);
             }
-
-            return commentary.getId();
+            
         } catch (PersistenceException e) {
             throw new OtherAccessException(e);
         }

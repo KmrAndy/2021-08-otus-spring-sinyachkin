@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 public class BookRepositoryJpa implements BookRepository {
     @PersistenceContext
@@ -32,15 +31,14 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public long insertBook(Book book) throws DataAccessException{
+    public Book insertBook(Book book) throws DataAccessException{
         try {
             if (book.getId() <= 0) {
                 em.persist(book);
+                return book;
             } else {
-                em.merge(book);
+                return em.merge(book);
             }
-
-            return book.getId();
         } catch (PersistenceException e){
             throw new OtherAccessException(e);
         }

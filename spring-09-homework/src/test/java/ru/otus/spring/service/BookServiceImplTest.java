@@ -55,18 +55,16 @@ class BookServiceImplTest {
         Book expectedBook = new Book(4L, "The Hobbit", expectedAuthor, expectedGenre);
 
         when(bookRepository.insertBook(insertedBook))
-                .thenReturn(expectedBook.getId());
+                .thenReturn(expectedBook);
         when(authorService.getAuthorByName(expectedAuthor.getFirstName(), expectedAuthor.getLastName()))
                 .thenReturn(expectedAuthor);
         when(genreService.getGenreByName(expectedGenre.getName())).thenReturn(expectedGenre);
 
-        long bookId = bookService.addNewBook(insertedBook.getName(), insertedBook.getAuthor().getFirstName(),
+        Book actualBook = bookService.addNewBook(insertedBook.getName(), insertedBook.getAuthor().getFirstName(),
                 insertedBook.getAuthor().getLastName(), insertedBook.getGenre().getName());
 
-        when(bookRepository.getBookById(bookId))
+        when(bookRepository.getBookById(actualBook.getId()))
                 .thenReturn(expectedBook);
-
-        Book actualBook = bookService.getBookById(bookId);
 
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }

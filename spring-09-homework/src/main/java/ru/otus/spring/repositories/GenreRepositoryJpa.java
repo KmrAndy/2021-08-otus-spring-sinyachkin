@@ -8,7 +8,6 @@ import ru.otus.spring.exception.OtherAccessException;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 public class GenreRepositoryJpa implements GenreRepository {
     @PersistenceContext
