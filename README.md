@@ -8,3 +8,4 @@
 Домашнее задание №3 - spring-03-homework
 Домашнее задание №4 - spring-05-homework
 Домашнее задание №5 - spring-07-homework
+Домашнее задание №6 - spring-09-homework
