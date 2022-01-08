@@ -1,0 +1,69 @@
+1641567260025:count
+1641567268226:getall
+1641567945370:count
+1641567948340:getall
+1641567972185:chngbyid 1 test
+1641567982579:getall
+1641568011039:getbookbyid 2
+1641568288376:count
+1641568290962:getall
+1641568297765:getbookbyid 1
+1641568316306:getbookbyid 3
+1641568365787:addbook test leo tolstov novel
+1641568380588:addbook test leo tolstoy drama
+1641568398854:addbook test leo tolstoy novel
+1641568403504:getall
+1641568419733:delbook 2
+1641568422903:getall
+1641568502195:addbook test leo tolstov novel
+1641568509717:addbook test leo tolstoy novel
+1641568702561:count
+1641568705040:getall
+1641568716572:addbook test leo tolstoy novel
+1641568728340:delbook 2
+1641568748308:getall
+1641568781597:addbook test leo tolstoy fantasy
+1641568785666:getall
+1641582292187:delbook 2
+1641583644302:delbook 3
+1641584548329:count
+1641584550990:getall
+1641584577073:chngbyid 2 testbook
+1641584591842:chngbyid 3 testbook
+1641584666487:getall
+1641584674826:getbookbyid 1
+1641584684362:getbookbyid 3
+1641584730249:getall
+1641584734665:delbook 3
+1641584744181:delbook 2
+1641584746936:getrall
+1641584749646:getall
+1641584774243:addbook testbook john talkieng drama
+1641584784729:addbook testbook john talkien drama
+1641584797955:addbook testbook john tolkien drama
+1641584814623:addbook testbook john tolkien novel
+1641584819969:getall
+1641584829096:commcount
+1641584833036:commcount 1
+1641584987722:chngtextbyid 1 newtext
+1641584999918:getcommbyid 1
+1641585004120:getcommbyid 2
+1641585007976:getcommbyid 3
+1641585012658:getcommbyid 4
+1641585021915:getbookcomms 3
+1641585026871:getbookcomms 2
+1641585035133:getbookcomms 1
+1641585069158:delcomm 1
+1641585148827:addcomm 2 testcomm
+1641585158869:addcomm 3 testcomm
+1641585785317:getbookcomms 3
+1641586869747:chngbyid 2 testbook
+1641586884587:chngbyid 3 testbook
+1641587067594:chngbyid 2 testbook
+1641587070562:getall
+1641587090554:chngbyid 3 testbook
+1641587118787:chngtextbyid 4 testcomm
+1641587127642:chngtextbyid 3 testcomm
+1641589746910:getall
+1641589749324:count
+1641589753487:commcount 2
