@@ -1,0 +1,20 @@
+library:
+  locale: ru
+
+spring:
+  shell:
+    interactive:
+      enabled: false
+  data:
+    mongodb:
+      port: 0
+      database: test
+
+mongock:
+  #runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
