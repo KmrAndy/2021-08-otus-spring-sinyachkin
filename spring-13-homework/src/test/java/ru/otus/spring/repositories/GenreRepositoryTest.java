@@ -18,8 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @DisplayName("Репозиторий для работы с жанрами")
-@EnableConfigurationProperties
-@ComponentScan({"ru.otus.spring.config", "ru.otus.spring.repositories"})
 class GenreRepositoryTest {
 
     @Autowired

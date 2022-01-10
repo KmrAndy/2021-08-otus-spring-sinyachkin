@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @DisplayName("Репозиторий для работы с авторами")
-@EnableConfigurationProperties
-@ComponentScan({"ru.otus.spring.config", "ru.otus.spring.repositories"})
 class AuthorRepositoryTest {
 
     @Autowired

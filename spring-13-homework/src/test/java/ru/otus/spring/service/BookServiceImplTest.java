@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @DisplayName("Сервис для работы с книгами")
-@EnableConfigurationProperties
 class BookServiceImplTest {
 
     @MockBean

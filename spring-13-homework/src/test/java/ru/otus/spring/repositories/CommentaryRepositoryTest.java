@@ -15,10 +15,8 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataMongoTest
 @DisplayName("Репозиторий для работы с комментариями")
-@EnableConfigurationProperties
-@ComponentScan({"ru.otus.spring.config", "ru.otus.spring.repositories"})
 class CommentaryRepositoryTest {
-    private static final Long EXPECTED_COMMENTARY_COUNT = 2L;
+    private static final Long EXPECTED_COMMENTARY_COUNT = 1L;
 
     @Autowired
     private CommentaryRepository commentaryRepository;

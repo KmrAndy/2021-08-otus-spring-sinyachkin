@@ -17,8 +17,6 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataMongoTest
 @DisplayName("Репозиторий для работы с книгами")
-@EnableConfigurationProperties
-@ComponentScan({"ru.otus.spring.config", "ru.otus.spring.repositories"})
 class BookRepositoryTest {
     private static final long EXPECTED_BOOK_COUNT = 3L;
 
