@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Commentary</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Commentary view -->
+<form id="commedit-form" th:action="@{/commedit(id=${commentary.id})}" th:method="post" action="commedit.html">
+    <h1>Commentary Info:</h1>
+
+    <div class="row">
+        <label for="commentaryId-input">ID:</label>
+        <input id="commentaryId-input" name="commentaryId" type="text" readonly="readonly" th:value="${commentary.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="bookname-input">Book Name:</label>
+        <input id="bookname-input" name="bookname" readonly="readonly" type="text" th:value="${commentary.book.name}"/>
+    </div>
+
+    <div class="row">
+        <label for="text-input">Text:</label>
+        <input id="text-input" name="text" type="text" th:value="${commentary.text}"/>
+    </div>
+
+    <input id="bookId-input" name="bookId" type="hidden" th:value="${commentary.book.id}"/>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+<!-- Return -->
+<br>
+<a th:href="@{/bookedit(id=${commentary.book.id})}" href="bookedit.html">Back</a>
+
+</body>
+</html>

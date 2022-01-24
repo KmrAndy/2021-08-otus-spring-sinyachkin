@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Book view -->
+<form id="edit-form" th:action="@{/bookedit(id=${book.id})}" th:method="post" action="bookedit.html">
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:value="${book.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Name:</label>
+        <input id="name-input" name="name" type="text" th:value="${book.name}"/>
+    </div>
+
+    <div class="row">
+        <label for="authors-input">Authors:</label>
+        <input id="authors-input" name="authors" type="text" readonly="readonly" th:value="${book.getAuthorsString}"/>
+    </div>
+
+    <div class="row">
+        <label for="genres-input">Genres:</label>
+        <input id="genres-input" name="genres" type="text" readonly="readonly" th:value="${book.getGenresString}"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+<br>
+
+<form th:action="@{/bookdel}" th:method="post">
+    <input id="bookId-input" name="bookId" type="hidden" th:value="${book.id}"/>
+    <button type="submit">Delete</button>
+</form>
+
+<h1>Commentaries:</h1>
+
+<table class="commentaries">
+    <tbody>
+    <tr th:each="commentary : ${commentaries}">
+        <td>
+            <a th:href="@{/commedit(id=${commentary.id})}" href="commedit.html" th:text="${commentary.text}">Text</a>
+        </td>
+        <td>
+            <form th:action="@{/commdel}" th:method="post">
+                <input id="commentaryId-input" name="commentaryId" type="hidden" th:value="${commentary.id}"/>
+                <input id="commBookId-input" name="bookId" type="hidden" th:value="${commentary.book.id}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/commadd(book=${book.id})}" href="bookadd.html">Add Commentary</a>
+<br>
+
+<!-- Return -->
+<br>
+<a th:href="@{/booklist}" href="booklist.html">Back</a>
+
+</body>
+</html>

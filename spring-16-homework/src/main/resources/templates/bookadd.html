@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add Book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Book add -->
+<form id="add-form" th:action="@{/bookadd}" th:method="post" action="bookadd.html">
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="name-input">Name:</label>
+        <input id="name-input" name="name" type="text"/>
+    </div>
+
+    <div class="row">
+        <label for="authors-input">Authors:</label>
+        <input id="authors-input" type="checkbox" name="authors"
+               th:each="author : ${authors}"
+               th:text="${author.getFullName}"
+               th:value="${author.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="genres-input">Genres:</label>
+        <input id="genres-input" type="checkbox" name="genres"
+               th:each="genre : ${genres}"
+               th:text="${genre.name}"
+               th:value="${genre.id}"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+<br>
+<!-- Return -->
+<a th:href="@{/booklist}" href="booklist.html">Back</a>
+
+</body>
+</html>
