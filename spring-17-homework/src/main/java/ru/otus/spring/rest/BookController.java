@@ -16,29 +16,29 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/api/booklist")
+    @GetMapping("/api/books")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/api/bookedit/{id}")
+    @GetMapping("/api/books/{id}")
     public Book editBook(@PathVariable String id) {
         return bookService.getBookById(id);
     }
     
-    @PostMapping("/api/bookedit/")
+    @PutMapping("/api/books/")
     public ResponseEntity saveBook(@RequestBody Book book) {
         bookService.changeBookNameByBookId(book.getId(), book.getName());
         return ResponseEntity.ok(bookService.getBookById(book.getId()));
     }
 
-    @PostMapping("/api/bookdel")
+    @DeleteMapping("/api/books")
     public ResponseEntity deleteBook(@RequestBody Book book) {
         bookService.deleteByBookId(book.getId());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/api/bookadd")
+    @PostMapping("/api/books")
     public ResponseEntity addBook(@RequestBody Book book) {
         bookService.addNewBook(book.getName(), book.getAuthors(), book.getGenres());
         return ResponseEntity.ok().build();

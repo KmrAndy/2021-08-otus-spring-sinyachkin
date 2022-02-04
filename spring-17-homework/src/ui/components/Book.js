@@ -41,8 +41,8 @@ export default class Book extends React.Component {
 
     getBookInfo(bookId){
         Promise.all([
-                    fetch('/api/bookedit/' + bookId),
-                    fetch('/api/commlist/' + bookId)
+                    fetch('/api/books/' + bookId),
+                    fetch('/api/bookcomments/' + bookId)
                 ])
                 .then(([book, comms]) => Promise.all([book.json(), comms.json()]))
                 .then(([book, comms]) => this.setState({id: book.id,
@@ -55,8 +55,8 @@ export default class Book extends React.Component {
     };
 
     async updateBookName(book){
-        await fetch('/api/bookedit/',{
-                method: 'POST',
+        await fetch('/api/books/',{
+                method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -67,8 +67,8 @@ export default class Book extends React.Component {
     };
 
     async deleteBook(book){
-        await fetch('/api/bookdel',{
-                method: 'POST',
+        await fetch('/api/books',{
+                method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -79,8 +79,8 @@ export default class Book extends React.Component {
     };
 
     async deleteCommentary(commentary){
-        await fetch('/api/commdel',{
-                method: 'POST',
+        await fetch('/api/comments',{
+                method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'

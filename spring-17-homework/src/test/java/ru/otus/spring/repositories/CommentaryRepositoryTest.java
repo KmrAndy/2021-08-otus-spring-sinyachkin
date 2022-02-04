@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Sort;
 import ru.otus.spring.models.Book;
 import ru.otus.spring.models.Commentary;
 
@@ -27,7 +28,7 @@ class CommentaryRepositoryTest {
     @DisplayName("Получаем количество комментариев у книги")
     @Test
     void shouldReturnExpectedCommentaryCount() {
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Long actualCount = commentaryRepository.countByBook(book.getId());
         assertThat(actualCount).isEqualTo(EXPECTED_COMMENTARY_COUNT);
     }

@@ -3,8 +3,8 @@ package ru.otus.spring.rest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.models.Genre;
@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(GenreController.class)
+@AutoConfigureDataMongo
 @DisplayName("Тестирование рест контроллера жанров")
 class GenreControllerTest {
     @Autowired
@@ -37,7 +37,7 @@ class GenreControllerTest {
 
         when(genreService.getAllGenres()).thenReturn(expectedGenres);
 
-        mvc.perform(get("/api/genrelist"))
+        mvc.perform(get("/api/genres"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(expectedGenres.get(0).getName()))
                 .andExpect(jsonPath("$[1].name").value(expectedGenres.get(1).getName()));

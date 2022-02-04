@@ -15,7 +15,7 @@ public class GenreController {
         this.genreService = genreService;
     }
 
-    @GetMapping("/api/genrelist")
+    @GetMapping("/api/genres")
     public List<Genre> getAllGenres() {
         return genreService.getAllGenres();
     }

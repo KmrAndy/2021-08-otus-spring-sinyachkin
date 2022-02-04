@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.models.Author;
@@ -21,13 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(BookController.class)
+@AutoConfigureDataMongo
 @DisplayName("Тестирование рест контроллера книг")
 class BookControllerTest {
     @Autowired
@@ -51,7 +50,7 @@ class BookControllerTest {
     void shouldReturnAllBooks() throws Exception {
         when(bookService.getAllBooks()).thenReturn(expectedBooks);
 
-        mvc.perform(get("/api/booklist"))
+        mvc.perform(get("/api/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(expectedBooks.get(0).getName()))
                 .andExpect(jsonPath("$[1].name").value(expectedBooks.get(1).getName()))
@@ -68,7 +67,7 @@ class BookControllerTest {
     void shouldReturnExpectedBook() throws Exception {
         when(bookService.getBookById("1")).thenReturn(expectedBooks.get(0));
 
-        mvc.perform(get("/api/bookedit/1"))
+        mvc.perform(get("/api/books/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(expectedBooks.get(0).getName()))
                 .andExpect(jsonPath("$.authors[0].firstName").value(expectedBooks.get(0).getAuthors().get(0).getFirstName()))
@@ -90,7 +89,7 @@ class BookControllerTest {
         ArgumentCaptor<String> nameCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(bookService).changeBookNameByBookId(any(String.class), nameCapture.capture());
 
-        mvc.perform(post("/api/bookedit/").contentType(APPLICATION_JSON).content(requestBody))
+        mvc.perform(put("/api/books/").contentType(APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
 
         assertEquals(expectedBookName, nameCapture.getValue());
@@ -108,7 +107,7 @@ class BookControllerTest {
         ArgumentCaptor<String> idCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(bookService).deleteByBookId(idCapture.capture());
 
-        mvc.perform(post("/api/bookdel").contentType(APPLICATION_JSON).content(requestBody))
+        mvc.perform(delete("/api/books").contentType(APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
 
         assertEquals(expectedBook.getId(), idCapture.getValue());
@@ -128,7 +127,7 @@ class BookControllerTest {
         ArgumentCaptor<List<Genre>> genresCapture = ArgumentCaptor.forClass(List.class);
         when(bookService.addNewBook(nameCapture.capture(), authorsCapture.capture(), genresCapture.capture())).thenReturn(expectedBook);
 
-        mvc.perform(post("/api/bookadd").contentType(APPLICATION_JSON).content(requestBody))
+        mvc.perform(post("/api/books").contentType(APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
 
         assertEquals(expectedBook.getName(), nameCapture.getValue());

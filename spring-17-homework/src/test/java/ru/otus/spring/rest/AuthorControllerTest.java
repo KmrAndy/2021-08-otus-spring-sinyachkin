@@ -3,8 +3,8 @@ package ru.otus.spring.rest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.models.Author;
@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(AuthorController.class)
+@AutoConfigureDataMongo
 @DisplayName("Тестирование рест контроллера авторов")
 class AuthorControllerTest {
     @Autowired
@@ -37,7 +37,7 @@ class AuthorControllerTest {
 
         when(authorService.getAllAuthors()).thenReturn(expectedAuthors);
 
-        mvc.perform(get("/api/authorlist"))
+        mvc.perform(get("/api/authors"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName").value(expectedAuthors.get(0).getFirstName()))
                 .andExpect(jsonPath("$[0].lastName").value(expectedAuthors.get(0).getLastName()))

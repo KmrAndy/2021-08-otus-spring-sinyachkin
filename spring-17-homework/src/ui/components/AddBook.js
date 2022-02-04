@@ -25,13 +25,13 @@ export default class AddBook extends React.Component {
     };
 
     getAllAuthors(){
-        fetch('/api/authorlist')
+        fetch('/api/authors')
             .then(response => response.json())
             .then(authors => this.setState({authors}));
     }
 
     getAllGenres(){
-            fetch('/api/genrelist')
+            fetch('/api/genres')
                 .then(response => response.json())
                 .then(genres => this.setState({genres}));
     }
@@ -77,7 +77,7 @@ export default class AddBook extends React.Component {
     };
 
     async AddBook(book){
-        await fetch('/api/bookadd',{
+        await fetch('/api/books',{
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

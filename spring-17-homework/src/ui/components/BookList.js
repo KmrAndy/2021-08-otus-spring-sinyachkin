@@ -23,7 +23,7 @@ export default class BookList extends React.Component {
     }
 
     getAllBooks(){
-        fetch('/api/booklist')
+        fetch('/api/books')
             .then(response => response.json())
             .then(books => this.setState({books}));
     }

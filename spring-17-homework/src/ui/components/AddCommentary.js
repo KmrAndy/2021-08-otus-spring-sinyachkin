@@ -20,7 +20,7 @@ export default class AddCommentary extends React.Component {
     };
 
     getBook(id){
-        fetch('/api/bookedit/' + id)
+        fetch('/api/books/' + id)
             .then(response => response.json())
             .then(book => this.setState({book}));
     }
@@ -41,7 +41,7 @@ export default class AddCommentary extends React.Component {
     };
 
     async AddCommentary(commentary){
-        await fetch('/api/commadd',{
+        await fetch('/api/comments',{
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

@@ -30,7 +30,7 @@ export default class Commentary extends React.Component {
     };
 
     findCommentaryById(id){
-        fetch('/api/commedit/' + id)
+        fetch('/api/comments/' + id)
             .then(response => response.json())
             .then(commentary => this.setState({id: commentary.id,
                                                book: commentary.book,
@@ -38,8 +38,8 @@ export default class Commentary extends React.Component {
     }
 
     async updateCommentaryText(commentary){
-        await fetch('/api/commedit/',{
-                method: 'POST',
+        await fetch('/api/comments/',{
+                method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'

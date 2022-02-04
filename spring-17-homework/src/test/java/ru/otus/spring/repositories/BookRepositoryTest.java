@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Sort;
 import ru.otus.spring.models.Author;
 import ru.otus.spring.models.Book;
 import ru.otus.spring.models.Genre;
@@ -67,7 +68,7 @@ class BookRepositoryTest {
     @DisplayName("Получаем книгу по ее id")
     @Test
     void shouldReturnBookById() {
-        Book expectedBook = bookRepository.findAll().get(0);
+        Book expectedBook = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Optional<Book> actualBook = bookRepository.findById(expectedBook.getId());
 
         assertThat(actualBook.get()).isNotNull().usingRecursiveComparison().isEqualTo(expectedBook);
