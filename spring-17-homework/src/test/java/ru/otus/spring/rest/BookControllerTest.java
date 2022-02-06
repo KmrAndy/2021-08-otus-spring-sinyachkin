@@ -82,15 +82,16 @@ class BookControllerTest {
         Book expectedBook = expectedBooks.get(0);
         expectedBook.setName(expectedBookName);
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestBody=ow.writeValueAsString(expectedBook);
-
         ArgumentCaptor<String> nameCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(bookService).changeBookNameByBookId(any(String.class), nameCapture.capture());
+        when(bookService.getBookById(expectedBook.getId())).thenReturn(expectedBook);
 
-        mvc.perform(put("/api/books/").contentType(APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
+        mvc.perform(put("/api/books/" + expectedBook.getId() + "/" + expectedBookName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(expectedBook.getName()))
+                .andExpect(jsonPath("$.authors[0].firstName").value(expectedBook.getAuthors().get(0).getFirstName()))
+                .andExpect(jsonPath("$.authors[0].lastName").value(expectedBook.getAuthors().get(0).getLastName()))
+                .andExpect(jsonPath("$.genres[0].name").value(expectedBook.getGenres().get(0).getName()));
 
         assertEquals(expectedBookName, nameCapture.getValue());
     }
@@ -100,14 +101,10 @@ class BookControllerTest {
     void shouldDeleteBook() throws Exception {
         Book expectedBook = expectedBooks.get(0);
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestBody=ow.writeValueAsString(expectedBook);
-
         ArgumentCaptor<String> idCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(bookService).deleteByBookId(idCapture.capture());
 
-        mvc.perform(delete("/api/books").contentType(APPLICATION_JSON).content(requestBody))
+        mvc.perform(delete("/api/books/" + expectedBook.getId()))
                 .andExpect(status().isOk());
 
         assertEquals(expectedBook.getId(), idCapture.getValue());

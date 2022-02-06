@@ -26,20 +26,20 @@ public class BookController {
         return bookService.getBookById(id);
     }
     
-    @PutMapping("/api/books/")
-    public ResponseEntity saveBook(@RequestBody Book book) {
-        bookService.changeBookNameByBookId(book.getId(), book.getName());
-        return ResponseEntity.ok(bookService.getBookById(book.getId()));
+    @PutMapping("/api/books/{id}/{newName}")
+    public ResponseEntity<Book> saveBook(@PathVariable String id, @PathVariable String newName) {
+        bookService.changeBookNameByBookId(id, newName);
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @DeleteMapping("/api/books")
-    public ResponseEntity deleteBook(@RequestBody Book book) {
-        bookService.deleteByBookId(book.getId());
+    @DeleteMapping("/api/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable String id) {
+        bookService.deleteByBookId(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/api/books")
-    public ResponseEntity addBook(@RequestBody Book book) {
+    public ResponseEntity<Void> addBook(@RequestBody Book book) {
         bookService.addNewBook(book.getName(), book.getAuthors(), book.getGenres());
         return ResponseEntity.ok().build();
     }

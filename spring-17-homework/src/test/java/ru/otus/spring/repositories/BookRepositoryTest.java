@@ -1,7 +1,6 @@
 package ru.otus.spring.repositories;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -17,6 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
 @DataMongoTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Репозиторий для работы с книгами")
 class BookRepositoryTest {
     private static final long EXPECTED_BOOK_COUNT = 3L;
@@ -31,6 +31,7 @@ class BookRepositoryTest {
     private GenreRepository genreRepository;
 
     @DisplayName("Получаем общее количество книг")
+    @Order(1)
     @Test
     void shouldReturnExpectedBookCount() {
         long actualBookCount = bookRepository.count();
@@ -38,6 +39,7 @@ class BookRepositoryTest {
     }
 
     @DisplayName("Добавляем новую книгу")
+    @Order(2)
     @Test
     void shouldInsertBook() {
         Author expectedAuthor = authorRepository.findByFirstNameIgnoreCaseAndLastNameIgnoreCase("John", "Tolkien").get();
@@ -54,9 +56,10 @@ class BookRepositoryTest {
     }
 
     @DisplayName("Изменяем название книги по ее id")
+    @Order(3)
     @Test
     void shouldUpdateBookNameById() {
-        Book expectedBook = bookRepository.findAll().get(0);
+        Book expectedBook = bookRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).get(0);
         String expectedBookName = "Test Book";
         expectedBook.setName(expectedBookName);
 
@@ -66,6 +69,7 @@ class BookRepositoryTest {
     }
 
     @DisplayName("Получаем книгу по ее id")
+    @Order(4)
     @Test
     void shouldReturnBookById() {
         Book expectedBook = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
@@ -75,9 +79,10 @@ class BookRepositoryTest {
     }
 
     @DisplayName("Удаляем книгу из библиотеки по ее id")
+    @Order(5)
     @Test
     void shouldDeleteByBookId() {
-        Book expectedBook = bookRepository.findAll().get(0);
+        Book expectedBook = bookRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).get(0);
         assertThat(expectedBook).isNotNull();
 
         bookRepository.deleteById(expectedBook.getId());

@@ -32,9 +32,7 @@ export default class Book extends React.Component {
     async bookUpdate(event) {
         event.preventDefault();
         let book = {id: this.state.id,
-                    name: this.state.name,
-                    authors: this.state.authors,
-                    genres: this.state.genres
+                    name: this.state.name
         };
         this.updateBookName(book);
     };
@@ -42,7 +40,7 @@ export default class Book extends React.Component {
     getBookInfo(bookId){
         Promise.all([
                     fetch('/api/books/' + bookId),
-                    fetch('/api/bookcomments/' + bookId)
+                    fetch('/api/comments/book/' + bookId)
                 ])
                 .then(([book, comms]) => Promise.all([book.json(), comms.json()]))
                 .then(([book, comms]) => this.setState({id: book.id,
@@ -55,37 +53,22 @@ export default class Book extends React.Component {
     };
 
     async updateBookName(book){
-        await fetch('/api/books/',{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(book)
+        await fetch('/api/books/' + book.id + '/' + book.name,{
+                method: 'PUT'
         });
         this.props.history.push('/');
     };
 
-    async deleteBook(book){
-        await fetch('/api/books',{
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(book)
+    async deleteBook(bookId){
+        await fetch('/api/books/' + bookId,{
+                method: 'DELETE'
         });
         this.props.history.push('/');
     };
 
     async deleteCommentary(commentary){
-        await fetch('/api/comments',{
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: commentary.id
+        await fetch('/api/comments/' + commentary.id,{
+                method: 'DELETE'
         });
 
         let commentaries = this.state.commentaries;
@@ -123,7 +106,7 @@ export default class Book extends React.Component {
                         <button type="submit">Save</button>
                     </form>
                     <br/>
-                    <button type="button" onClick={() => this.deleteBook(this.state)}>Delete</button>
+                    <button type="button" onClick={() => this.deleteBook(this.state.id)}>Delete</button>
                     <br/>
                     <Header title={'Commentaries'}/>
                     <table>

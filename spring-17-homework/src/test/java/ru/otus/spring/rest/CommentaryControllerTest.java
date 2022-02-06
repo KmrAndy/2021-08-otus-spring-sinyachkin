@@ -52,7 +52,7 @@ class CommentaryControllerTest {
     void shouldReturnAllBookCommentaries() throws Exception {
         when(commentaryService.getCommentariesByBookId(expectedBook.getId())).thenReturn(expectedCommentaries);
 
-        mvc.perform(get("/api/bookcomments/" + expectedBook.getId()))
+        mvc.perform(get("/api/comments/book/" + expectedBook.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].text").value(expectedCommentaries.get(0).getText()))
                 .andExpect(jsonPath("$[1].text").value(expectedCommentaries.get(1).getText()))
@@ -78,15 +78,14 @@ class CommentaryControllerTest {
         Commentary expectedCommentary = expectedCommentaries.get(0);
         expectedCommentary.setText(expectedCommentaryText);
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestBody=ow.writeValueAsString(expectedCommentary);
-
         ArgumentCaptor<String> textCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(commentaryService).changeCommentaryTextById(any(String.class), textCapture.capture());
+        when(commentaryService.getCommentaryById(expectedCommentary.getId())).thenReturn(expectedCommentary);
 
-        mvc.perform(put("/api/comments").contentType(APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
+        mvc.perform(put("/api/comments/" + expectedCommentary.getId() + "/" + expectedCommentaryText))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value(expectedCommentary.getText()))
+                .andExpect(jsonPath("$.book.name").value(expectedCommentary.getBook().getName()));
 
         assertEquals(expectedCommentaryText, textCapture.getValue());
     }
@@ -95,12 +94,11 @@ class CommentaryControllerTest {
     @Test
     void shouldDeleteCommentary() throws Exception {
         Commentary expectedCommentary = expectedCommentaries.get(0);
-        String requestBody = expectedCommentary.getId();
 
         ArgumentCaptor<String> idCapture = ArgumentCaptor.forClass(String.class);
         doNothing().when(commentaryService).deleteByCommentaryId(idCapture.capture());
 
-        mvc.perform(delete("/api/comments").contentType(APPLICATION_JSON).content(requestBody))
+        mvc.perform(delete("/api/comments/" + expectedCommentary.getId()))
                 .andExpect(status().isOk());
 
         assertEquals(expectedCommentary.getId(), idCapture.getValue());

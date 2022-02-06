@@ -1,7 +1,6 @@
 package ru.otus.spring.repositories;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -15,9 +14,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
 @DataMongoTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Репозиторий для работы с комментариями")
 class CommentaryRepositoryTest {
-    private static final Long EXPECTED_COMMENTARY_COUNT = 1L;
+    private static final Long EXPECTED_COMMENTARY_COUNT = 2L;
 
     @Autowired
     private CommentaryRepository commentaryRepository;
@@ -26,6 +26,7 @@ class CommentaryRepositoryTest {
     private BookRepository bookRepository;
 
     @DisplayName("Получаем количество комментариев у книги")
+    @Order(1)
     @Test
     void shouldReturnExpectedCommentaryCount() {
         Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
@@ -34,9 +35,10 @@ class CommentaryRepositoryTest {
     }
 
     @DisplayName("Добавляем новый комментарий")
+    @Order(2)
     @Test
     void shouldInsertCommentary() {
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Commentary expectedCommentary = new Commentary(book, "New commentary");
 
         Commentary actualCommentary = commentaryRepository.save(expectedCommentary);
@@ -48,9 +50,10 @@ class CommentaryRepositoryTest {
     }
 
     @DisplayName("Изменяем текст комментария по его id")
+    @Order(3)
     @Test
     void shouldUpdateCommentaryById() {
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Commentary expectedCommentary = commentaryRepository.findAllByBook(book.getId()).get(0);
         String expectedCommentaryText = "New Commentary text";
 
@@ -62,9 +65,10 @@ class CommentaryRepositoryTest {
     }
 
     @DisplayName("Получаем комментарий по его id")
+    @Order(4)
     @Test
     void shouldReturnCommentaryById() {
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Commentary expectedCommentary = commentaryRepository.findAllByBook(book.getId()).get(0);
         Optional<Commentary> actualCommentary = commentaryRepository.findById(expectedCommentary.getId());
 
@@ -73,9 +77,10 @@ class CommentaryRepositoryTest {
     }
 
     @DisplayName("Удаляем комментарий по его id")
+    @Order(5)
     @Test
     void shouldDeleteByCommentaryId() {
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).get(0);
         Commentary expectedCommentary = commentaryRepository.findAllByBook(book.getId()).get(0);
 
         commentaryRepository.deleteById(expectedCommentary.getId());

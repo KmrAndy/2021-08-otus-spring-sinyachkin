@@ -15,7 +15,7 @@ public class CommentaryController {
         this.commentaryService = commentaryService;
     }
 
-    @GetMapping("/api/bookcomments/{bookId}")
+    @GetMapping("/api/comments/book/{bookId}")
     public List<Commentary> getAllBookCommentaries(@PathVariable String bookId) {
             return commentaryService.getCommentariesByBookId(bookId);
     }
@@ -25,20 +25,20 @@ public class CommentaryController {
         return commentaryService.getCommentaryById(id);
     }
 
-    @PutMapping("/api/comments")
-    public ResponseEntity saveCommentary(@RequestBody Commentary commentary) {
-        commentaryService.changeCommentaryTextById(commentary.getId(), commentary.getText());
-        return ResponseEntity.ok().build();
+    @PutMapping("/api/comments/{id}/{newText}")
+    public ResponseEntity<Commentary> saveCommentary(@PathVariable String id, @PathVariable String newText) {
+        commentaryService.changeCommentaryTextById(id, newText);
+        return ResponseEntity.ok(commentaryService.getCommentaryById(id));
     }
 
-    @DeleteMapping("/api/comments")
-    public ResponseEntity deleteCommentary(@RequestBody String id) {
+    @DeleteMapping("/api/comments/{id}")
+    public ResponseEntity<Void> deleteCommentary(@PathVariable String id) {
         commentaryService.deleteByCommentaryId(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/api/comments")
-    public ResponseEntity addCommentary(@RequestBody Commentary commentary) {
+    public ResponseEntity<Void> addCommentary(@RequestBody Commentary commentary) {
         commentaryService.addNewCommentary(commentary.getBook(), commentary.getText());
         return ResponseEntity.ok().build();
     }
