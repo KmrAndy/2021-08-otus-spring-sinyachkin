@@ -30,21 +30,18 @@ public class BookController {
         return bookRepository.findById(id);
     }
 
-    @PutMapping("/api/books/{id}/{newName}")
-    public Mono<Book> saveBook(@PathVariable String id, @PathVariable String newName) {
-        Mono<Book> book = bookRepository.findById(id)
-                .map(foundBook -> {foundBook.setName(newName); return foundBook;});
-
-        bookRepository.saveAll(book)
+    @PatchMapping("/api/books/{id}")
+    public Mono<Book> saveBook(@PathVariable String id, @RequestBody Book book) {
+        bookRepository.save(book)
                 .subscribe();
 
         Flux<Commentary> commentaries = commentaryRepository.findAllByBook(id)
-                .map(commentary -> {commentary.getBook().setName(newName); return commentary;});
+                .map(commentary -> {commentary.getBook().setName(book.getName()); return commentary;});
 
         commentaryRepository.saveAll(commentaries)
                 .subscribe();
 
-        return book;
+        return Mono.just(book);
     }
 
     @DeleteMapping("/api/books/{id}")

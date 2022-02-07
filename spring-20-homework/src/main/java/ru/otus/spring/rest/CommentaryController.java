@@ -25,15 +25,12 @@ public class CommentaryController {
         return repository.findById(id);
     }
 
-    @PutMapping("/api/comments/{id}/{newText}")
-    public Mono<Commentary> saveCommentary(@PathVariable String id, @PathVariable String newText) {
-        Mono<Commentary> commentary = repository.findById(id)
-                .map(foundCommentary -> {foundCommentary.setText(newText); return foundCommentary;});
-
-        repository.saveAll(commentary)
+    @PatchMapping("/api/comments/{id}")
+    public Mono<Commentary> saveCommentary(@PathVariable String id, @RequestBody Commentary commentary) {
+        repository.save(commentary)
                 .subscribe();
 
-        return commentary;
+        return Mono.just(commentary);
     }
 
     @DeleteMapping("/api/comments/{id}")

@@ -32,7 +32,9 @@ export default class Book extends React.Component {
     async bookUpdate(event) {
         event.preventDefault();
         let book = {id: this.state.id,
-                    name: this.state.name
+                    name: this.state.name,
+                    authors: this.state.authors,
+                    genres: this.state.genres
         };
         this.updateBookName(book);
     };
@@ -53,8 +55,13 @@ export default class Book extends React.Component {
     };
 
     async updateBookName(book){
-        await fetch('/api/books/' + book.id + '/' + book.name,{
-                method: 'PUT'
+        await fetch('/api/books/' + book.id,{
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(book)
         });
         this.props.history.push('/');
     };

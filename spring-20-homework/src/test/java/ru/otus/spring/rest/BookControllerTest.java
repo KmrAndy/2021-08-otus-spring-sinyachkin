@@ -100,13 +100,13 @@ class BookControllerTest {
         Mono<Book> expectedBook = Mono.just(book);
         Flux<Commentary> expectedCommentaries = Flux.just(commentary);
 
-        when(bookRepository.findById("1")).thenReturn(expectedBook);
-        when(bookRepository.saveAll(Flux.from(expectedBook))).thenReturn(Flux.merge(expectedBook));
+        when(bookRepository.save(book)).thenReturn(expectedBook);
         when(commentaryRepository.findAllByBook(any(String.class))).thenReturn(expectedCommentaries);
         when(commentaryRepository.saveAll(expectedCommentaries)).thenReturn(expectedCommentaries);
 
-        webTestClient.put()
-                .uri("/api/books/1/" + expectedBookName)
+        webTestClient.patch()
+                .uri("/api/books/1")
+                .body(expectedBook, Book.class)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

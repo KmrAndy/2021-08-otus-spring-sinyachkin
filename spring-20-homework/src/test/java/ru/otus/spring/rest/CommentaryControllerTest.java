@@ -84,11 +84,11 @@ class CommentaryControllerTest {
 
         Mono<Commentary> expectedCommentary = Mono.just(commentary);
 
-        when(commentaryRepository.findById(firstCommentary.getId())).thenReturn(expectedCommentary);
-        when(commentaryRepository.saveAll(expectedCommentary)).thenReturn(Flux.merge(expectedCommentary));
+        when(commentaryRepository.save(commentary)).thenReturn(expectedCommentary);
 
-        webTestClient.put()
-                .uri("/api/comments/" + firstCommentary.getId() + "/" + expectedText)
+        webTestClient.patch()
+                .uri("/api/comments/" + firstCommentary.getId())
+                .body(expectedCommentary, Commentary.class)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

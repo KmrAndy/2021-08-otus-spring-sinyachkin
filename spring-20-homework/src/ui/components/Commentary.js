@@ -38,8 +38,13 @@ export default class Commentary extends React.Component {
     }
 
     async updateCommentaryText(commentary){
-        await fetch('/api/comments/' + commentary.id + "/" + commentary.text,{
-                method: 'PUT'
+        await fetch('/api/comments/' + commentary.id,{
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(commentary)
         });
         this.props.history.push('/bookedit/' + commentary.book.id);
     };
