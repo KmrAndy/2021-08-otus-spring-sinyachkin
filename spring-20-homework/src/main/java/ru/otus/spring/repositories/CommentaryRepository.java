@@ -6,5 +6,4 @@ import ru.otus.spring.models.Book;
 import ru.otus.spring.models.Commentary;
 
 public interface CommentaryRepository extends ReactiveMongoRepository<Commentary, String>, CommentaryRepositoryCustom {
-    Flux<Commentary> findAllByBook(Book book);
 }

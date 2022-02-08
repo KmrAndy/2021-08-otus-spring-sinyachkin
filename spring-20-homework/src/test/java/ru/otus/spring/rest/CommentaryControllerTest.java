@@ -116,7 +116,7 @@ class CommentaryControllerTest {
     @DisplayName("Добавляем комментарий")
     @Test
     void shouldAddCommentary() throws Exception {
-        when(commentaryRepository.save(firstCommentary)).thenReturn(Mono.empty());
+        when(commentaryRepository.save(firstCommentary)).thenReturn(Mono.just(firstCommentary));
 
         webTestClient.post()
                 .uri("/api/comments")
@@ -124,6 +124,6 @@ class CommentaryControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Void.class);
+                .expectBody(Commentary.class);
     }
 }

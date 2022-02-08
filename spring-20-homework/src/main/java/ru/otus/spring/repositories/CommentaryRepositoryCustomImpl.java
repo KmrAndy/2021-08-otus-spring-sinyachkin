@@ -1,6 +1,7 @@
 package ru.otus.spring.repositories;
 
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,12 +21,14 @@ public class CommentaryRepositoryCustomImpl implements CommentaryRepositoryCusto
     private final ReactiveMongoTemplate mongoTemplate;
 
     @Override
-    public Flux<Commentary> updateCommentariesBook(Book newBook, List<Commentary> commentaries) throws DataAccessException{
-        for(Commentary comm : commentaries){
-            comm.setBook(newBook);
-            mongoTemplate.save(comm);
-        }
-        return Flux.fromIterable(commentaries);
+    public Mono<UpdateResult> updateCommentariesBookByBook(Book book) throws DataAccessException{
+        Query query = new Query();
+        query.addCriteria(Criteria.where("book.id").is(book.getId()));
+
+        Update update = new Update();
+        update.set("book", book);
+
+        return mongoTemplate.updateMulti(query, update, Commentary.class);
     }
 
     @Override
@@ -37,9 +40,9 @@ public class CommentaryRepositoryCustomImpl implements CommentaryRepositoryCusto
     }
 
     @Override
-    public Mono<DeleteResult> deleteCommentariesByBook(Book book) throws DataAccessException{
+    public Mono<DeleteResult> deleteCommentariesByBookId(String bookId) throws DataAccessException{
         Query query = new Query();
-        query.addCriteria(Criteria.where("book").is(book));
+        query.addCriteria(Criteria.where("book.id").is(bookId));
         return mongoTemplate.remove(query, Commentary.class);
     }
 }

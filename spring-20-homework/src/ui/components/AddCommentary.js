@@ -49,8 +49,6 @@ export default class AddCommentary extends React.Component {
                 },
                 body: JSON.stringify(commentary)
         });
-        console.log(commentary);
-        console.log(this.state);
         this.props.history.push('/bookedit/' + commentary.book.id);
     };
 

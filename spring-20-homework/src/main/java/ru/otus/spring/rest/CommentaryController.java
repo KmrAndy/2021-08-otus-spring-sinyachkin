@@ -27,25 +27,16 @@ public class CommentaryController {
 
     @PatchMapping("/api/comments/{id}")
     public Mono<Commentary> saveCommentary(@PathVariable String id, @RequestBody Commentary commentary) {
-        repository.save(commentary)
-                .subscribe();
-
-        return Mono.just(commentary);
+        return repository.save(commentary);
     }
 
     @DeleteMapping("/api/comments/{id}")
     public Mono<Void> deleteCommentary(@PathVariable String id) {
-        repository.deleteById(id)
-                .subscribe();
-
-        return Mono.empty();
+        return repository.deleteById(id);
     }
 
     @PostMapping("/api/comments")
     public Mono<Commentary> addCommentary(@RequestBody Commentary commentary) {
-        repository.save(commentary)
-                .subscribe();
-
-        return Mono.empty();
+        return repository.save(commentary);
     }
 }

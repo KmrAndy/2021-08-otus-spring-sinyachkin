@@ -65,9 +65,9 @@ public class InitMongoDBDataTestChangeLog {
 
     @ChangeSet(order = "004", id = "initCommentaries", author = "kmrandy", runAlways = true)
     public void initCommentaries(CommentaryRepository repository){
-        repository.save(new Commentary(bookLOTR, "Amazing book!")).subscribe();
-        repository.save(new Commentary(bookLOTR, "So cool!")).subscribe();
-        repository.save(new Commentary(bookWAP, "Boring...")).subscribe();
-        repository.save(new Commentary(bookAnna, "Interesting")).subscribe();
+        repository.save(new Commentary(bookLOTR, "Amazing book!"));
+        repository.save(new Commentary(bookLOTR, "So cool!"));
+        repository.save(new Commentary(bookWAP, "Boring..."));
+        repository.save(new Commentary(bookAnna, "Interesting"));
     }
 }

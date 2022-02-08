@@ -1,5 +1,7 @@
 package ru.otus.spring.rest;
 
+import com.mongodb.client.result.UpdateResult;
+import org.bson.BsonValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import ru.otus.spring.models.Author;
 import ru.otus.spring.models.Book;
 import ru.otus.spring.models.Commentary;
@@ -38,19 +41,14 @@ class BookControllerTest {
     private final Book firstBook = new Book(
             "1",
             "FirstBook",
-            List.of(new Author("John", "Tolkien")),
-            List.of(new Genre("fantasy")));
+            List.of(new Author("1","John", "Tolkien")),
+            List.of(new Genre("1","fantasy")));
 
     private final Book secondBook = new Book(
             "2",
             "SecondBook",
-            List.of(new Author("Leo", "Tolstoy")),
-            List.of(new Genre("novel")));
-
-    private final Commentary firstCommentary = new Commentary(
-            "1",
-            firstBook,
-            "test commentary");
+            List.of(new Author("2","Leo", "Tolstoy")),
+            List.of(new Genre("2","novel")));
 
     @DisplayName("Получаем все книги")
     @Test
@@ -94,36 +92,30 @@ class BookControllerTest {
         Book book = firstBook;
         book.setName(expectedBookName);
 
-        Commentary commentary = firstCommentary;
-        commentary.setBook(book);
-
         Mono<Book> expectedBook = Mono.just(book);
-        Flux<Commentary> expectedCommentaries = Flux.just(commentary);
 
         when(bookRepository.save(book)).thenReturn(expectedBook);
-        when(commentaryRepository.findAllByBook(any(String.class))).thenReturn(expectedCommentaries);
-        when(commentaryRepository.saveAll(expectedCommentaries)).thenReturn(expectedCommentaries);
+        when(commentaryRepository.updateCommentariesBookByBook(book))
+                .thenReturn(Mono.just(UpdateResult.acknowledged(1L, 1L, null)));
 
         webTestClient.patch()
                 .uri("/api/books/1")
-                .body(expectedBook, Book.class)
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+                .body(expectedBook, Book.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Book.class)
-                .value(resultBook -> {
-                    assertThat(resultBook).isEqualTo(book);
+                .value(result -> {
+                    assertThat(result).isEqualTo(book);
                 });
     }
 
     @DisplayName("Удаляем книгу")
     @Test
     void shouldDeleteBook() throws Exception {
-        Flux<Commentary> expectedCommentaries = Flux.just(firstCommentary);
-
         when(bookRepository.deleteById("1")).thenReturn(Mono.empty());
-        when(commentaryRepository.findAllByBook(any(String.class))).thenReturn(Flux.merge(expectedCommentaries));
-        when(commentaryRepository.deleteAll(expectedCommentaries)).thenReturn(Mono.empty());
+        when(commentaryRepository.deleteCommentariesByBookId("1")).thenReturn(Mono.empty());
 
         webTestClient.delete()
                 .uri("/api/books/1")
@@ -136,7 +128,7 @@ class BookControllerTest {
     @DisplayName("Добавляем книгу")
     @Test
     void shouldAddBook() throws Exception {
-        when(bookRepository.save(firstBook)).thenReturn(Mono.empty());
+        when(bookRepository.save(firstBook)).thenReturn(Mono.just(firstBook));
 
         webTestClient.post()
                 .uri("/api/books")
@@ -144,7 +136,11 @@ class BookControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Void.class);
+                .expectBody(Book.class)
+                .value(resultBook -> {
+                    assertThat(resultBook).isEqualTo(firstBook);
+                });
+
 
     }
 }
