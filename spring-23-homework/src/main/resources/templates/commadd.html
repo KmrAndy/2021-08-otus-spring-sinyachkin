@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add Commentary</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div style="float: right;">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+
+<!-- Commentary add -->
+<form id="add-form" th:action="@{/commadd(bookId=${book.id})}" th:method="post" action="commadd.html">
+    <h1>Commentary Info:</h1>
+
+    <div class="row">
+        <label for="bookname-input">Book:</label>
+        <input id="bookname-input" name="bookname" type="text" readonly="readonly" th:value="${book.name}"/>
+    </div>
+
+    <div class="row">
+        <label for="text-input">Text:</label>
+        <input id="text-input" name="text" type="text"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Add</button>
+    </div>
+</form>
+<br>
+<!-- Return -->
+<a th:href="@{/bookedit(id=${book.id})}" href="bookedit.html">Back</a>
+
+</body>
+</html>
