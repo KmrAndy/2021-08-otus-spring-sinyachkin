@@ -1,0 +1,20 @@
+library:
+  locale: ru
+
+spring:
+  data:
+    mongodb:
+      port: 0
+      database: test
+
+mongock:
+  #runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.testchangelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging.level.org.springframework.web: DEBUG
+spring.mvc.log-request-details: true
