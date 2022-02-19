@@ -1,10 +1,8 @@
 package ru.otus.spring.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.spring.models.Book;
 import ru.otus.spring.models.Commentary;
 import ru.otus.spring.service.BookService;
 import ru.otus.spring.service.CommentaryService;
@@ -27,7 +25,6 @@ public class CommentaryController {
     }
 
     @PostMapping("/commedit")
-    @PreAuthorize("hasRole('ADMIN')")
     public String saveCommentary(@RequestParam("id") String id, String text, Model model) {
         commentaryService.changeCommentaryTextById(id, text);
         Commentary commentary = commentaryService.getCommentaryById(id);
@@ -36,7 +33,6 @@ public class CommentaryController {
     }
 
     @PostMapping("/commdel")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCommentary(String commentaryId, String bookId, Model model) {
         commentaryService.deleteByCommentaryId(commentaryId);
         return "redirect:/bookedit?id=" + bookId;

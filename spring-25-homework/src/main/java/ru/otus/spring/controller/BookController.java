@@ -1,9 +1,5 @@
 package ru.otus.spring.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +48,6 @@ public class BookController {
     }
     
     @PostMapping("/bookedit")
-    @PreAuthorize("hasRole('ADMIN')")
     public String saveBook(Book book, Model model) {
         bookService.changeBookNameByBookId(book.getId(), book.getName());
         model.addAttribute("book", book);
@@ -60,14 +55,12 @@ public class BookController {
     }
 
     @PostMapping("/bookdel")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteBook(String bookId, Model model) {
         bookService.deleteByBookId(bookId);
         return "redirect:/booklist";
     }
 
     @GetMapping("/bookadd")
-    @PreAuthorize("hasRole('ADMIN')")
     public String addBook(Model model) {
         model.addAttribute("authors", authorService.getAllAuthors());
         model.addAttribute("genres", genreService.getAllGenres());
@@ -75,7 +68,6 @@ public class BookController {
     }
 
     @PostMapping("/bookadd")
-    @PreAuthorize("hasRole('ADMIN')")
     public String addBook(@RequestParam String name, @RequestParam List<String> authorsId, @RequestParam List<String> genresId, Model model) {
         List<Author> authors = new ArrayList<>();
         List<Genre> genres = new ArrayList<>();
