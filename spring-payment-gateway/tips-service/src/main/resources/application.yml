@@ -1,0 +1,52 @@
+tips:
+  description: "Оплата чаевых в кафе"
+
+spring:
+  application:
+    name: tips-service
+  cloud:
+    config:
+      enabled: false
+    discovery:
+       client:
+          simple:
+            instances:
+              payment-service[0]:
+                uri: http://localhost:9201
+              fee-service[0]:
+                uri: http://localhost:9101
+  data:
+    mongodb:
+      uri: mongodb+srv://user:qwerty123@cluster0.vbyd5.mongodb.net/tipsDB?retryWrites=true&w=majority
+      database: tipsDB
+
+server:
+  port: 9001
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file:
+    name: my.log
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  server:
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true

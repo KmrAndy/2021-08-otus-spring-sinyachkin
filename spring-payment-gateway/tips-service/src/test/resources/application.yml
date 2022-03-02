@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: tips-service
+  cloud:
+    config:
+      enabled: false
+  data:
+    mongodb:
+      port: 0
+      database: test
